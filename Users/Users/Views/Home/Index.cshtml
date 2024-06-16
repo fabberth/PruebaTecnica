@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Listado de usuario";
+}
+
+<script type="text/javascript">
+
+    window.addEventListener('load', function () {
+
+        /* LISTADO */
+        var columnsData = [
+            { "data": "id", "name": "id", title: "Id" },
+            { "data": "name", "name": "name", title: "Nombre" },
+            { "data": "username", "name": "username", title: "Usuario" },
+            { "data": "email", "name": "email", title: "Correo" },
+            { "data": "address.city", "name": "address.city", title: "Ciudad" },
+            { "data": "address", "name": "address", title: "Dirección" },
+            { "data": "phone", "name": "phone", title: "Telefono" },
+            { "data": "website", "name": "website", title: "Sitio web" },
+            { "data": "company", "name": "company", title: "Compañía" }
+        ];
+
+        var rowCallbackData = function (row, data) {
+            $('td:eq(5)', row).html(
+                `<spam>
+                    <strong>calle:</strong> ${data.address.street}
+                </spam> <br/>
+                <spam>
+                        <strong>suite:</strong> ${data.address.suite}
+                </spam> <br/>
+                <spam>
+                        <strong>código postal:</strong> ${data.address.zipcode}
+                </spam>
+                
+                `
+            );
+
+            $('td:eq(7)', row).html(
+                `<a href="https://${data.website}">
+                        ${data.website}
+                </a>`
+            );
+
+            $('td:eq(8)', row).html(
+                `<spam>
+                        <strong>nombre:</strong> ${data.company.name}
+                </spam> <br/>
+                <spam>
+                        <strong>frase clave:</strong> ${data.company.catchPhrase}
+                </spam> <br/>
+                <spam>
+                        <strong>bs:</strong> ${data.company.bs}
+                </spam>
+
+                `
+            );
+        };
+
+        var order = [[0, 'asc']];
+
+        const pageSize = [10, 50, 100, -1];
+
+        var table = GenerateDataTable('@Url.Action("GetElements", "Home")', 'table-Content', 'dataFilters', columnsData, rowCallbackData, order, pageSize);
+
+        /* FIN LISTADO */
+
+    });
+
+</script>
+
+
+
+<div class="row">
+    <div class="col">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <form action="" id="dataFilters">
+
+        <div class="row">
+            <div class="col">
+                <label for="id">Id:</label>
+                <input name="id" data-validation="filtrar" class="form-control" type="text">
+            </div>
+            <div class="col">
+                <label for="name">Nombre:</label>
+                <input name="name" data-validation="filtrar" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label for="email">Correo:</label>
+                <input name="email" data-validation="filtrar" class="form-control" type="text">
+            </div>
+            <div class="col">
+                <label for="city">Ciudad:</label>
+                <input name="city" data-validation="filtrar" class="form-control" type="text">
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<br />
+
+<table id="table-Content" class="table table-bordered table small" style="width:100%">
+    <thead class="table-primary">
+    </thead>
+</table>
+
+
+<br />
+
+
